@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+   DESIGN TOKENS
+   Change the accent in one place and the whole site follows.
+   ========================================================================== */
+
+@theme {
+  --color-ink: #08080a;
+  --color-ink-soft: #101014;
+  --color-ink-line: #1e1e24;
+  --color-bone: #f4f2ee;
+  --color-bone-dim: #a3a1a0;
+  --color-accent: #ff4d2e;
+
+  --font-display: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ============================================================================
+   BASE
+   ========================================================================== */
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Locks background scroll while a modal is open, without the layout shift
+   you get from simply setting overflow:hidden on a scrollbar'd page. */
+body.is-locked {
+  overflow: hidden;
+  touch-action: none;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* Keyboard focus only — no ring on mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ============================================================================
+   TYPE
+   ========================================================================== */
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+/* Fluid display sizes: scale with viewport, clamped at both ends so they
+   never get silly on a phone or a 5K monitor.
+
+   The hero cap is tuned so the longest discipline ("Interactive Design")
+   stays on one line at desktop widths — above ~10vw it wraps and pushes the
+   scroll cue off the bottom of the viewport. */
+.text-hero {
+  font-size: clamp(2.75rem, 10vw, 9rem);
+}
+
+.text-section {
+  font-size: clamp(2rem, 6vw, 4.5rem);
+}
+
+.text-eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ============================================================================
+   UTILITIES
+   ========================================================================== */
+
+.hairline {
+  border-top: 1px solid var(--color-ink-line);
+}
+
+/* ============================================================================
+   CAROUSEL PROGRESS BAR
+
+   Where supported, the indicator is driven by a scroll-driven animation rather
+   than JavaScript. The browser links it directly to the rail's scroll offset
+   and runs it on the compositor, so it tracks a swipe perfectly — no scroll
+   listener, no per-frame transform write, and no chance of the one-frame lag
+   you get by driving it from JS.
+
+   Carousel.jsx falls back to writing the transform itself when
+   `animation-timeline` isn't available.
+
+   The end value is (100 / BAR_FRACTION - 100)% — it must stay in sync with
+   BAR_FRACTION in Carousel.jsx. At 0.28 that's 257.1429%.
+   ========================================================================== */
+
+@keyframes rail-progress-slide {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(257.1429%);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .rail-scroller {
+    scroll-timeline: --rail inline;
+  }
+
+  .rail-scope {
+    timeline-scope: --rail;
+  }
+
+  .rail-progress {
+    animation: rail-progress-slide linear both;
+    animation-timeline: --rail;
+  }
+}
+
+/* Subtle film-grain wash so the flat black doesn't band on large screens. */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hide scrollbars on horizontal rails while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

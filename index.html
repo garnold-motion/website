@@ -1,55 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en-AU">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>George Arnold</title>
-    <style>
-        html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #1a1a1a;
-            overflow: hidden; 
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#08080a" />
 
-        #canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-    </style>
+    <title>George Arnold — Video Editing, Motion Design, Interactive Design</title>
+    <meta
+      name="description"
+      content="George Arnold is a freelance video editor, motion designer and interactive designer based in Melbourne, Australia."
+    />
+
+    <!-- Open Graph / social sharing. Swap og-image.jpg for a real 1200x630 frame. -->
+    <meta property="og:title" content="George Arnold — Video, Motion, Interactive" />
+    <meta
+      property="og:description"
+      content="Freelance editor and designer working across film, motion and interactive."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://georgearnold.au" />
+    <meta property="og:image" content="https://georgearnold.au/img/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href="https://georgearnold.au" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    
-    <canvas id="canvas"></canvas>
-
-    <script src="https://unpkg.com/@rive-app/webgl2"></script>
-
-    <script>
-        const canvas = document.getElementById("canvas");
-
-        const r = new rive.Rive({
-            src: "website.riv",
-            canvas: canvas,
-            autoBind: true,
-            autoplay: true,
-            stateMachines: "State Machine 1",
-            enableWebAudio: true,
-            layout: new rive.Layout({
-                fit: rive.Fit.Contain,
-                alignment: rive.Alignment.Center
-            }),
-            onLoad: () => {
-                r.resizeDrawingSurfaceToCanvas(); 
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            r.resizeDrawingSurfaceToCanvas();
-        });
-
-    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
