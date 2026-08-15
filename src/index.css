@@ -1,10 +1,5 @@
 @import 'tailwindcss';
 
-/* ============================================================================
-   DESIGN TOKENS
-   Change the accent in one place and the whole site follows.
-   ========================================================================== */
-
 @theme {
   --color-ink: #08080a;
   --color-ink-soft: #101014;
@@ -54,8 +49,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Locks background scroll while a modal is open, without the layout shift
-   you get from simply setting overflow:hidden on a scrollbar'd page. */
 body.is-locked {
   overflow: hidden;
   touch-action: none;
@@ -66,7 +59,6 @@ body.is-locked {
   color: var(--color-ink);
 }
 
-/* Keyboard focus only — no ring on mouse clicks. */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
@@ -83,12 +75,6 @@ body.is-locked {
   line-height: 0.92;
 }
 
-/* Fluid display sizes: scale with viewport, clamped at both ends so they
-   never get silly on a phone or a 5K monitor.
-
-   The hero cap is tuned so the longest discipline ("Interactive Design")
-   stays on one line at desktop widths — above ~10vw it wraps and pushes the
-   scroll cue off the bottom of the viewport. */
 .text-hero {
   font-size: clamp(2.75rem, 10vw, 9rem);
 }
@@ -111,23 +97,6 @@ body.is-locked {
 .hairline {
   border-top: 1px solid var(--color-ink-line);
 }
-
-/* ============================================================================
-   CAROUSEL PROGRESS BAR
-
-   Where supported, the indicator is driven by a scroll-driven animation rather
-   than JavaScript. The browser links it directly to the rail's scroll offset
-   and runs it on the compositor, so it tracks a swipe perfectly — no scroll
-   listener, no per-frame transform write, and no chance of the one-frame lag
-   you get by driving it from JS.
-
-   Carousel.jsx falls back to writing the transform itself when
-   `animation-timeline` isn't available.
-
-   The end value is (100 / BAR_FRACTION - 100)% — it must stay in sync with
-   BAR_FRACTION in Carousel.jsx. At 0.28 that's 257.1429%.
-   ========================================================================== */
-
 @keyframes rail-progress-slide {
   from {
     transform: translateX(0%);
@@ -152,7 +121,6 @@ body.is-locked {
   }
 }
 
-/* Subtle film-grain wash so the flat black doesn't band on large screens. */
 .grain::after {
   content: '';
   position: fixed;
@@ -163,7 +131,6 @@ body.is-locked {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Hide scrollbars on horizontal rails while keeping them scrollable. */
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

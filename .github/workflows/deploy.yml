@@ -10,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Let a new push cancel an in-flight deploy rather than queue behind it.
 concurrency:
   group: pages
   cancel-in-progress: true
