@@ -1,3 +1,5 @@
+import LocalVideo from './LocalVideo.jsx';
+
 /**
  * Renders a video from whichever source the data file specifies.
  *
@@ -47,16 +49,10 @@ export default function VideoPlayer({ item, autoPlay = true, className = '' }) {
     );
   }
 
-  // Self-hosted MP4.
+  // Self-hosted MP4 — custom control layer, see LocalVideo.
   return (
-    <video
-      className={`h-full w-full bg-black object-contain ${className}`}
-      src={item.src}
-      poster={item.poster}
-      controls
-      autoPlay={autoPlay}
-      playsInline
-      preload="metadata"
-    />
+    <div className={`h-full w-full ${className}`}>
+      <LocalVideo item={item} autoPlay={autoPlay} />
+    </div>
   );
 }

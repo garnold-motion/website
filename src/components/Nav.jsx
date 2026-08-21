@@ -20,11 +20,18 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+      // Once scrolled the bar is fully opaque, not translucent. On phones the
+      // backdrop blur can fail to composite, and a semi-transparent bar then
+      // lets the page show through — which reads as the header going clear.
+      // Solid also guarantees the strip behind the status bar stays dark.
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
         scrolled
-          ? 'bg-ink/80 backdrop-blur-xl border-b border-ink-line'
-          : 'bg-transparent border-b border-transparent'
+          ? 'border-b border-ink-line bg-ink backdrop-blur-xl'
+          : 'border-b border-transparent bg-transparent'
       }`}
+      // Keeps the links clear of the notch when the page runs edge to edge
+      // (viewport-fit=cover in index.html).
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-10 md:py-5">
         <a

@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8" />
+<title>George Arnold — CV</title>
+<style>
+  /* ==========================================================================
+     George Arnold — CV
+
+     Single A4 page. To regenerate the PDF: open this file in Chrome, Cmd+P,
+     then set Margins → None and tick More settings → Background graphics.
+     Without those two the dark band and cream paper print white.
+
+     Palette lives in :root below. --accent is a deepened version of the site's
+     #2CFFE2, because that cyan is illegible as text on cream; the pure cyan
+     appears only on the dark band where it has the contrast to work.
+
+     The headshot is embedded as a base64 data URI so this file stands alone.
+     To swap it: replace headshot.jpg and run `python3 build.py`.
+     ========================================================================== */
+
+  @page { size: A4; margin: 0; }
+
+  :root {
+    --paper:  #efede7;
+    --band:   #08211e;
+    --ink:    #171a19;
+    --muted:  #55564f;
+    --line:   #d2cfc5;
+    --accent: #0b6b5f;
+    --cyan:   #2cffe2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 210mm;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------------------------------------------------------------- band */
+
+  .band {
+    display: flex;
+    background: var(--band);
+    height: 67mm;
+    flex: none;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Soft cyan bloom, echoing the hero on the website. */
+  .band::after {
+    content: '';
+    position: absolute;
+    right: -30mm;
+    bottom: -40mm;
+    width: 100mm;
+    height: 100mm;
+    border-radius: 50%;
+    background: var(--cyan);
+    opacity: 0.09;
+  }
+
+  .shot {
+    width: 46mm;
+    height: 67mm;
+    object-fit: cover;
+    object-position: 50% 22%;
+    flex: none;
+    filter: grayscale(100%) contrast(1.04);
+  }
+
+  .id {
+    position: relative;
+    flex: 1;
+    padding: 12mm 13mm 10mm 11mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .id h1 {
+    font-family: 'Inter Display', 'Inter', sans-serif;
+    font-size: 33pt;
+    font-weight: 800;
+    letter-spacing: -0.042em;
+    line-height: 0.95;
+    color: var(--paper);
+  }
+
+  .role {
+    margin-top: 3.6mm;
+    font-size: 9.6pt;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    color: var(--cyan);
+  }
+
+  .meta {
+    margin-top: 7mm;
+    padding-top: 4mm;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 8.5pt;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.74);
+  }
+  .meta span { color: rgba(255, 255, 255, 0.3); margin: 0 2.4mm; }
+  .meta b { color: #fff; font-weight: 600; }
+
+  /* ---------------------------------------------------------------- body */
+
+  .body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 56mm;
+    column-gap: 11mm;
+    padding: 11mm 13mm 12mm;
+  }
+
+  /* Section heads: a short accent rule above a tracked label. Replaces the
+     bordered-pill treatment so this doesn't read as the same document. */
+  .head {
+    display: block;
+    font-size: 7.9pt;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-top: 2.6mm;
+    border-top: 2px solid var(--accent);
+  }
+  section + section { margin-top: 8mm; }
+
+  p { font-size: 9.1pt; line-height: 1.58; color: var(--muted); }
+  .about p { margin-top: 3.4mm; }
+  .about b { color: var(--ink); font-weight: 600; }
+
+  .job { margin-top: 6.4mm; break-inside: avoid; }
+  .job:first-of-type { margin-top: 4.6mm; }
+
+  .job .top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4mm;
+  }
+  .job h3 {
+    font-family: 'Inter Display', 'Inter', sans-serif;
+    font-size: 13.5pt;
+    font-weight: 700;
+    letter-spacing: -0.022em;
+  }
+  .job .dates {
+    flex: none;
+    font-size: 8.2pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .job .org {
+    font-size: 8.9pt;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 0.6mm;
+  }
+
+  ul { list-style: none; margin-top: 2.6mm; }
+  li {
+    position: relative;
+    padding-left: 4mm;
+    font-size: 9.1pt;
+    line-height: 1.54;
+    color: var(--muted);
+    margin-top: 1.35mm;
+  }
+  li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2mm;
+    width: 2mm;
+    height: 1px;
+    background: var(--accent);
+  }
+  li b { color: var(--ink); font-weight: 600; }
+
+  aside { display: flex; flex-direction: column; }
+
+  /* ---------------------------------------------------------------- rail */
+
+  .skillgroup { margin-top: 4.4mm; break-inside: avoid; }
+  .skillgroup:first-of-type { margin-top: 3.8mm; }
+  .skillgroup h4 {
+    font-size: 8.6pt;
+    font-weight: 700;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    padding-bottom: 1.6mm;
+    border-bottom: 1px solid var(--line);
+  }
+  .skillgroup ul { margin-top: 2mm; }
+  .skillgroup li {
+    padding-left: 0;
+    font-size: 8.8pt;
+    line-height: 1.5;
+    margin-top: 0.7mm;
+  }
+  .skillgroup li::before { display: none; }
+
+  .clients {
+    margin-top: 3.8mm;
+    font-size: 8.8pt;
+    line-height: 1.62;
+    color: var(--muted);
+  }
+  .clients b { display: block; color: var(--ink); font-weight: 600; }
+
+  .refs {
+    margin-top: auto;
+    padding-bottom: 1mm;
+    padding-top: 3.4mm;
+    border-top: 1px solid var(--line);
+    font-size: 8.4pt;
+    font-style: italic;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============================== BAND ============================== -->
+  <header class="band">
+    <img class="shot" src="data:image/jpeg;base64,{{PHOTO}}" alt="George Arnold" />
+    <div class="id">
+      <h1>GEORGE<br />ARNOLD</h1>
+      <p class="role">Video Editing &nbsp;·&nbsp; Motion Design &nbsp;·&nbsp; Interactive</p>
+      <div class="meta">
+        <b>george@georgearnold.au</b><span>·</span>0436 020 782<br />
+        <b>georgearnold.au</b><span>·</span>Melbourne, Australia
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================== BODY ============================== -->
+  <div class="body">
+
+    <main>
+      <section class="about">
+        <span class="head">About</span>
+        <p>
+          Freelance <b>video editor and motion designer</b> with six years producing branded
+          content — social-first campaigns, brand films and motion graphics.
+        </p>
+        <p>
+          I cut in <b>Premiere Pro</b> and animate in <b>After Effects</b>, with <b>Rive</b> for
+          interactive pieces on request. I don't shoot these days, but I can source and brief
+          freelance crews when a job needs a camera.
+        </p>
+      </section>
+
+      <section>
+        <span class="head">Experience</span>
+
+        <article class="job">
+          <div class="top">
+            <h3>FREELANCE EDITOR &amp; MOTION DESIGNER</h3>
+            <div class="dates">2026 —</div>
+          </div>
+          <div class="org">Melbourne</div>
+          <ul>
+            <li>Edit and animate social campaigns, trade event content and pitch videos</li>
+            <li>Social-first cutdowns, brand films and motion graphics packages, delivered to spec</li>
+            <li>Rive interactive pieces for app and web</li>
+            <li>Source and brief freelance crews where a shoot is required</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="top">
+            <h3>BRANDED CONTENT PRODUCER</h3>
+            <div class="dates">2019 — 2026</div>
+          </div>
+          <div class="org">Nova Entertainment, Melbourne</div>
+          <ul>
+            <li>Led end-to-end production of multi-platform content for client campaigns,
+              brand partnerships and trade marketing</li>
+            <li>Took briefs from concept and ideation through to delivery and amplification
+              across digital, social and mobile</li>
+            <li>Built talent-led social campaigns for <b>Coles</b>, <b>Bakers Delight</b>,
+              <b>Gippsland Dairy</b> and <b>Neds</b></li>
+            <li>Wrote and edited scripts, and produced visual content for high-stakes client
+              pitches and internal communications</li>
+            <li>Managed project lifecycles, budgets and resourcing to tight deadlines while
+              holding brand consistency</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="top">
+            <h3>VIDEO EDITOR &amp; MOTION GRAPHICS ARTIST</h3>
+            <div class="dates">2016 — 2019</div>
+          </div>
+          <div class="org">Freelance, Melbourne</div>
+          <ul>
+            <li>Cut and animated commercial, corporate and event work to agency and studio briefs</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <aside>
+      <section>
+        <span class="head">Expertise</span>
+
+        <div class="skillgroup">
+          <h4>Design &amp; Motion</h4>
+          <ul>
+            <li>Adobe Creative Suite</li>
+            <li>Motion graphics &amp; VFX</li>
+            <li>Colour grading</li>
+            <li>Audio mixing &amp; sound design</li>
+          </ul>
+        </div>
+
+        <div class="skillgroup">
+          <h4>Web &amp; Interactive</h4>
+          <ul>
+            <li>Rive interactive design</li>
+            <li>HTML / CSS</li>
+            <li>GameMaker (GML)</li>
+          </ul>
+        </div>
+      </section>
+
+
+      <p class="refs">References available on request.</p>
+    </aside>
+
+  </div>
+</div>
+</body>
+</html>

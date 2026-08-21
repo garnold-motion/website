@@ -15,8 +15,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Working video files — keep source masters out of git.
-# Compressed web deliverables in public/video ARE tracked (see README).
+# Project and source files never belong in git.
 *.prproj
 *.aep
 /masters
+
+# Video is served from Cloudflare R2, not committed. Git keeps every version of
+# every file permanently, so committing a reel you'll re-cut bloats the repo
+# forever. Poster images are deliberately NOT ignored — they're small enough
+# that keeping their history is harmless.
+public/video/*.mp4
+public/video/*.mov
+public/video/*.m4v
+public/video/*.webm

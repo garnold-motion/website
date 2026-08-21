@@ -59,6 +59,7 @@ export default function Work() {
                     alt={item.title}
                     label={`Add ${item.poster}`}
                     ringed={item.featured}
+                    vertical={item.aspect === '9/16'}
                   />
 
                   <div className="mt-4 flex items-baseline justify-between gap-4">
@@ -92,7 +93,13 @@ export default function Work() {
       </Reveal>
 
       <Modal open={!!active} onClose={() => setActive(null)} label={active?.title ?? 'Video'}>
-        <div className="aspect-video w-full max-w-[1200px] overflow-hidden bg-black shadow-2xl">
+        <div
+          className={
+            active?.aspect === '9/16'
+              ? 'aspect-[9/16] h-[86svh] overflow-hidden bg-black shadow-2xl'
+              : 'aspect-video w-full max-w-[1200px] overflow-hidden bg-black shadow-2xl'
+          }
+        >
           {active && <VideoPlayer item={active} />}
         </div>
       </Modal>

@@ -4,10 +4,13 @@ import { Play } from 'lucide-react';
 /**
  * Poster thumbnail with a graceful fallback.
  *
- * Until real poster frames exist in /public/img, the image 404s — so we catch
- * that and render a labelled placeholder instead of a broken-image icon.
+ * Cards in the rail are all 16:9 so the row stays level. A vertical poster
+ * would either be cropped to a meaningless middle band or float in dead black
+ * bars, so those get the blurred-fill treatment instead: the same image
+ * scaled up and blurred behind, with the true frame contained on top. Reads as
+ * deliberate, and it signals the piece is vertical before you open it.
  */
-export default function Thumb({ src, alt, label, ratio = 'aspect-video', ringed = false }) {
+export default function Thumb({ src, alt, label, ratio = 'aspect-video', ringed = false, vertical = false }) {
   const [failed, setFailed] = useState(!src);
 
   return (
@@ -19,13 +22,33 @@ export default function Thumb({ src, alt, label, ratio = 'aspect-video', ringed 
       }`}
     >
       {!failed ? (
-        <img
-          src={src}
-          alt={alt}
-          loading="lazy"
-          onError={() => setFailed(true)}
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-        />
+        vertical ? (
+          <>
+            <img
+              src={src}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              onError={() => setFailed(true)}
+              className="absolute inset-0 h-full w-full scale-125 object-cover opacity-45 blur-2xl"
+            />
+            <img
+              src={src}
+              alt={alt}
+              loading="lazy"
+              onError={() => setFailed(true)}
+              className="relative mx-auto h-full w-auto object-contain transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            />
+          </>
+        ) : (
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            onError={() => setFailed(true)}
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+        )
       ) : (
         /* Visible enough to read as a deliberate empty slot rather than a
            rendering fault, without competing with real poster frames. */

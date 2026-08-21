@@ -21,30 +21,63 @@ details. You shouldn't need to open a component to update the site.
 
 ### Adding a video
 
-Two options, chosen per-video in `site.js`:
+**Videos are not in this repo.** They live in a Cloudflare R2 bucket and are
+served from `media.georgearnold.au`. Git keeps every version of every file
+permanently, so committing a reel you'll later re-cut bloats the repo forever —
+R2 has no history, so overwriting a file just replaces it.
+
+To add a piece:
+
+1. Upload the `.mp4` to the R2 bucket under `video/`
+2. Put its poster in `public/img/` as a JPG, ~1920px on the long edge
+3. Add an entry to `videoWork` in `src/data/site.js`:
 
 ```js
-// Self-hosted — file goes in public/video/
-{ type: 'local', src: '/video/my-film.mp4', poster: '/img/my-film.jpg' }
-
-// Vimeo
-{ type: 'vimeo', id: '824804225', poster: '/img/my-film.jpg' }
+{
+  id: 'my-piece',
+  title: 'Client — Piece Name',
+  role: 'Editor, Motion Graphics',
+  year: '2026',
+  type: 'local',
+  src: video('my-piece.mp4'),      // resolves to the R2 bucket
+  poster: '/img/my-piece.jpg',
+}
 ```
 
-Self-hosted is the default and it's the nicer experience — your domain, your
-player, no branding. Two limits to respect:
+To **replace** an existing video, just overwrite the file in R2 — no code
+change, no commit. Cloudflare may cache the old one briefly; purge it in the
+dashboard if you need it live immediately.
 
-- **GitHub rejects any file over 100MB.** Hard stop, no way around it.
-- Repos heavy with video get slow to clone and push, and GitHub Pages has a
-  100GB/month bandwidth allowance.
+Vertical (9:16) pieces need one extra line, `aspect: '9/16'`. That switches the
+thumbnail to a blurred-fill treatment so the card stays level with the others,
+and makes the lightbox tall rather than letterboxing the video into a strip.
 
-Practical rule: keep each file under ~40MB and the whole `public/video` folder
-under ~300MB. For a showreel that means H.264 MP4, 1080p, around 8–10 Mbps.
-Anything longer or heavier than that, put it on Vimeo and switch the `type`.
+`R2_BASE` at the top of `site.js` is the one place the host is named. Point it
+somewhere else, or set it to `''` and put files back in `public/video`, and
+everything follows.
 
-Poster frames go in `public/img/` as JPGs, ideally 1920×1080. Until you add
-them the grid shows a labelled placeholder telling you which file is missing —
-nothing breaks.
+Poster images **are** committed — they're small and their history is harmless.
+Until a poster exists the card shows a labelled placeholder naming the missing
+file, so nothing breaks silently.
+
+### The video player
+
+Self-hosted MP4s use a custom control layer (`src/components/LocalVideo.jsx`)
+rather than the browser's native controls. iOS draws a heavy bar with 15-second
+skip buttons across the frame and keeps it up whenever playback stalls, which
+on a showreel means chrome sitting over the opening shots.
+
+The custom layer is: tap to play/pause, thin accent progress bar with buffered
+indicator, mute and fullscreen, auto-hiding after 2.2s. It stays visible while
+paused, while scrubbing and while buffering. Keyboard: space to play/pause,
+arrows to seek 5s, m to mute.
+
+Vimeo and YouTube items still use their own embedded players — only `local`
+videos get this.
+
+**Export settings that work well:** H.264 High profile, 1080p, VBR 2-pass,
+~4 Mbps target, AAC audio at 160 kbps, and Fast Start enabled (this puts the
+file index at the front so playback can start before the download finishes).
 
 ### Adding a Rive piece
 
@@ -111,9 +144,6 @@ take up to an hour after DNS propagates).
 
 ## Still to add
 
-- Real showreel and project videos in `public/video/`
-- Poster frames in `public/img/`
-- `public/img/og-image.jpg` — 1200×630, used for link previews
-- `public/favicon.svg`
-- `public/rive/flappy-nova.riv`
-- Real social URLs in `site.js` (currently placeholder homepages)
+- `public/img/og-image.jpg` — 1200×630, used for link previews when shared
+- `public/rive/flappy-nova.riv` — the card renders a "coming soon" state until it lands
+- Real Rive pieces (the Interactive section is currently a placeholder)

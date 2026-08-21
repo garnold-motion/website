@@ -1,9 +1,24 @@
-/* ============================================================================
-   SITE CONTENT
-   ----------------------------------------------------------------------------
-   Everything you'll want to change day-to-day lives in this one file.
-   No need to touch any component to add a project, swap a video, or fix a link.
-   ========================================================================== */
+/* ----------------------------------------------------------------------------
+   WHERE VIDEO IS SERVED FROM
+
+   Video files are NOT in this repo. Git keeps every version of every file
+   forever, and reels get re-cut — so they live in a Cloudflare R2 bucket and
+   are served from media.georgearnold.au. Re-cutting a piece means overwriting
+   the file in R2; no commit, no history, no repo growth.
+
+   Poster images ARE committed. They're small enough that keeping their
+   history costs nothing.
+
+   Uploading a new piece:
+     1. Put the .mp4 in the R2 bucket under video/
+     2. Put its poster .jpg in /public/img  (1920px on the long edge)
+     3. Add an entry below with video('filename.mp4')
+   -------------------------------------------------------------------------- */
+
+const R2_BASE = 'https://media.georgearnold.au';
+
+/** Resolves a video filename to its URL in the R2 bucket. */
+const video = (file) => `${R2_BASE}/video/${file}`;
 
 export const site = {
   name: 'George Arnold',
@@ -11,66 +26,78 @@ export const site = {
   tagline: 'Freelance editor and designer working across film, motion and interactive.',
   location: 'Melbourne, Australia',
 
-  // The three big words under your name in the hero.
   disciplines: ['Video Editing', 'Motion Design', 'Interactive Design'],
 
   contact: {
-    email: 'garnoldmotion@gmail.com',
-    // Set to null to hide a link entirely.
-    socials: [
-      { label: 'Instagram', href: 'https://instagram.com/' },
-      { label: 'LinkedIn', href: 'https://linkedin.com/' },
-      { label: 'Vimeo', href: 'https://vimeo.com/' },
+    email: 'george@georgearnold.au',
+
+    // Rendered as one line under the email. Edit the numbers here.
+    // Set to null to hide the line entirely.
+    rates: [
+      { amount: '$120', unit: 'hourly' },
+      { amount: '$450', unit: 'half day' },
+      { amount: '$850', unit: 'day' },
     ],
-    // When you're ready for bookings, drop a Cal.com or Calendly URL in here
-    // and the contact section grows a "Check availability" button automatically.
+
+    // Put the PDF in /public and point at it. There's a placeholder there now —
+    // replace the file and the link keeps working, no code change.
+    cvUrl: '/george-arnold-cv.pdf',
+
     bookingUrl: null,
   },
 };
 
-/* ----------------------------------------------------------------------------
-   SHOWREEL — the single hero video at the top of the work section.
-   -------------------------------------------------------------------------- */
-
 export const showreel = {
   title: 'Showreel 2026',
-  // type: 'local' | 'vimeo' | 'youtube'
-  //   local  -> src is a path inside /public, e.g. '/video/showreel.mp4'
-  //   vimeo  -> id is the numeric Vimeo ID, e.g. '824804225'
-  //   youtube-> id is the watch ID, e.g. 'dQw4w9WgXcQ'
   type: 'local',
-  src: '/video/showreel.mp4',
-  // Poster frame shown before play. Also used as the section backdrop.
+  src: video('showreel.mp4'),
   poster: '/img/showreel-poster.jpg',
 };
 
-/* ----------------------------------------------------------------------------
-   VIDEO WORK — the grid below the showreel.
-
-   Each entry takes the same type/src/id shape as the showreel above, so you can
-   mix self-hosted MP4s and Vimeo embeds freely.
-
-   Keep self-hosted files under ~40MB each. GitHub rejects anything over 100MB
-   outright, and a repo heavy with video gets slow to push.
-   -------------------------------------------------------------------------- */
-
 export const videoWork = [
   {
-    id: 'nova-campaign',
-    title: 'Nova — Summer Campaign',
-    role: 'Edit, Motion Graphics',
+    id: 'fever-tree',
+    title: 'Fever Tree — Social Series',
+    role: 'Producer, Editor, Audio, Motion Graphics',
     year: '2025',
     type: 'local',
-    src: '/video/nova-campaign.mp4',
-    poster: '/img/nova-campaign.jpg',
+    src: video('fever-tree-9x16.mp4'),
+    poster: '/img/fever-tree-9x16.jpg',
+    // Vertical. Drives both the thumbnail treatment and the lightbox shape —
+    // without this a 9:16 film plays as a narrow strip inside a 16:9 box.
+    aspect: '9/16',
   },
+  {
+    id: 'wa-tourism',
+    title: 'WA Tourism — Social Series',
+    role: 'Producer, Editor, Audio',
+    year: '2023',
+    type: 'local',
+    src: video('wa-tourism.mp4'),
+    poster: '/img/wa-tourism.jpg',
+  },
+
+  {
+    id: 'nova-next',
+    title: 'Nova Next — Event Social Cut',
+    role: 'Camera, Edit',
+    year: '2024',
+    type: 'local',
+    src: video('nova-next.mp4'),
+    poster: '/img/nova-next.jpg',
+  },
+  /* ---------------------------------------------------------------------
+     Placeholders, commented out so the live site doesn't show cards reading
+     "Add /img/motion-reel.jpg". Uncomment an entry once its video and poster
+     are in /public/video and /public/img.
+
   {
     id: 'ramblers-brand',
     title: 'Ramblers — Brand Film',
     role: 'Edit, Colour',
     year: '2025',
     type: 'local',
-    src: '/video/ramblers-brand.mp4',
+    src: video('ramblers-brand.mp4'),
     poster: '/img/ramblers-brand.jpg',
   },
   {
@@ -79,7 +106,7 @@ export const videoWork = [
     role: 'Design, Animation',
     year: '2024',
     type: 'local',
-    src: '/video/motion-reel.mp4',
+    src: video('motion-reel.mp4'),
     poster: '/img/motion-reel.jpg',
   },
   {
@@ -88,20 +115,11 @@ export const videoWork = [
     role: 'Edit',
     year: '2024',
     type: 'local',
-    src: '/video/doc-short.mp4',
+    src: video('doc-short.mp4'),
     poster: '/img/doc-short.jpg',
   },
+  --------------------------------------------------------------------- */
 ];
-
-/* ----------------------------------------------------------------------------
-   INTERACTIVE WORK — Rive projects.
-
-   Each one opens in a phone frame on desktop, fullscreen on mobile.
-   Drop the .riv file in /public/rive/ and point `src` at it.
-
-   artboard / stateMachine: leave as null to use the file's defaults. Only set
-   them if a file has multiple artboards and you want a specific one.
-   -------------------------------------------------------------------------- */
 
 export const interactiveWork = [
   {
@@ -129,10 +147,6 @@ export const interactiveWork = [
     accent: '#5B8DEF',
   },
 ];
-
-/* ----------------------------------------------------------------------------
-   SERVICES — the short "what I do" strip. Keep these to one line each.
-   -------------------------------------------------------------------------- */
 
 export const services = [
   {

@@ -1,9 +1,9 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, FileText } from 'lucide-react';
 import { site } from '../data/site.js';
 import Reveal from './Reveal.jsx';
 
 export default function Contact() {
-  const { email, socials, bookingUrl } = site.contact;
+  const { email, rates, cvUrl, bookingUrl } = site.contact;
 
   return (
     <section id="contact" className="px-6 py-20 md:px-10 md:py-32">
@@ -13,8 +13,7 @@ export default function Contact() {
             <p className="text-eyebrow text-accent">04 — Contact</p>
 
             <h2 className="font-display text-section mt-5 max-w-4xl font-600 md:mt-7">
-              Got something you need cut, animated,
-              <br className="hidden md:block" /> or made interactive?
+              Got something you need cut or animated?
             </h2>
 
             {/* The email is the primary action — big, unmissable, no form to fill. */}
@@ -47,24 +46,36 @@ export default function Contact() {
               </div>
             )}
 
-            <div className="mt-14 flex flex-wrap gap-x-8 gap-y-3 md:mt-20">
-              {socials.map((social) => (
+            {rates?.length > 0 && (
+              <p className="mt-12 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[0.9rem] text-bone-dim md:mt-16">
+                <span className="text-eyebrow mr-1 text-bone-dim/60">Estimate rates</span>
+                {rates.map((rate, i) => (
+                  <span key={rate.unit} className="whitespace-nowrap">
+                    {i > 0 && <span aria-hidden="true" className="mr-2 text-bone-dim/30">·</span>}
+                    <span className="text-bone">{rate.amount}</span> {rate.unit}
+                  </span>
+                ))}
+              </p>
+            )}
+
+            {cvUrl && (
+              <div className="mt-6">
                 <a
-                  key={social.label}
-                  href={social.href}
+                  href={cvUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="group inline-flex items-center gap-1.5 text-[0.85rem] font-500 text-bone-dim transition-colors hover:text-bone"
+                  className="group inline-flex items-center gap-2.5 text-[0.85rem] font-500 text-bone-dim transition-colors hover:text-accent"
                 >
-                  {social.label}
+                  <FileText size={15} strokeWidth={1.75} />
+                  Download CV
                   <ArrowUpRight
                     size={13}
                     strokeWidth={1.75}
                     className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
                 </a>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
         </Reveal>
       </div>
